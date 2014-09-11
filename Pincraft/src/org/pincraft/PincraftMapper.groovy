@@ -13,11 +13,10 @@ class PincraftMapper implements Mapper {
 												"whitelist.json", "yyyy-MM-dd \'at\' HH:mm:ss z") ],
 			//"ChunkCoordinates"  : [ ClassPattern.usesStrings("Pos{x=",", y=",", z="),
 			//                        ClassPattern.doesImplementNormal("java.lang.Comparable")],
-			"net/minecraft/nbt/NBTBase" : [ ClassPattern.usesStrings("END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE",
-												"BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]")],
+
 			"net/minecraft/world/WorldServer"       : [ ClassPattern.usesStrings("doDaylightCycle", "doMobSpawning", "tickBlocks","tickChunk",
 												"TickNextTick list out of synch", "Exception while ticking a block")],
-			"net/minecraft/nbt/NBTTagString"      : [ ClassPattern.usesStrings("Empty string not allowed", "\"", "")],
+
 			"net/minecraft/item/Item"              : [ ClassPattern.usesStrings("CB3F55D3-645C-4F38-A497-9C13A33DB5CF")],
 			"net/minecraft/item/ItemStack"         : [ ClassPattern.usesStrings("#.###", "id", "Count", "Damage", "tag", "Unbreakable","x","@" )],
 			"net/minecraft/block/Block"             : [ ClassPattern.usesStrings("air", "stone", "grass", "dirt", "stonebrick", "cobblestone",
@@ -45,7 +44,7 @@ class PincraftMapper implements Mapper {
 			                        ClassPattern.usesStrings("game.hostile.swim", "game.hostile.swim.splash", "game.hostile.hurt",
 					                            "game.hostile.die", "game.hostile.hurt.fall.big",
 					                            "game.hostile.hurt.fall.small")],
-			//"net/minecraft/entity/passive/EntityAnimal"      : [ ClassPattern.usesStrings("heart","InLove")], //FAILING
+			"net/minecraft/entity/passive/EntityAnimal"      : [ ClassPattern.usesStrings("InLove")],
 			"net/minecraft/entity/passive/EntityVillager"    : [ ClassPattern.usesStrings("mob.villager")],
 			"net/minecraft/entity/passive/EntityPig"         : [ ClassPattern.usesStrings("mob.pig.say", "mob.pig.death", "Saddle")],
 			"net/minecraft/entity/player/EntityPlayer"      : [ ClassPattern.usesStrings("Ticking player", "Player being ticked", "playerGameType")],
@@ -80,7 +79,8 @@ class PincraftMapper implements Mapper {
 			"net/minecraft/world/EnumDifficulty"     : [ ClassPattern.isEnum(), ClassPattern.usesStrings("PEACEFUL", "EASY", "NORMAL", "HARD")],
 			//"net/minecraft/entity/Entity\$EnumEntitySize"     : [ ClassPattern.isEnum(), ClassPattern.usesStrings("SIZE_1", "SIZE_2", "SIZE_3", "SIZE_4", "SIZE_5", "SIZE_6")],
 			"net/minecraft/network/play/C02PacketUseEntity\$Action": [ ClassPattern.isEnum(), ClassPattern.usesStrings("INTERACT", "ATTACK")],
-			"net/minecraft/util/EnumFacing"         : [ ClassPattern.isEnum(), ClassPattern.usesStrings("DOWN", "UP", "NORTH", "SOUTH", "EAST", "WEST")],
+			//MULTIPLE MATCHES \/
+			//"net/minecraft/util/EnumFacing"         : [ ClassPattern.isEnum(), ClassPattern.usesStrings("DOWN", "UP", "NORTH", "SOUTH", "EAST", "WEST")],
 			"net/minecraft/item/ItemFishFood\$FishType"           : [ ClassPattern.isEnum(), ClassPattern.usesStrings("COD", "SALMON", "CLOWNFISH", "PUFFERFISH")],
 			"net/minecraft/world/WorldSettings\$GameType"       : [ ClassPattern.isEnum(), ClassPattern.usesStrings("NOT_SET", "SURVIVAL", "CREATIVE", "ADVENTURE")],
 			"net/minecraft/world/gen/layer/GenLayerEdge\$SwitchMode": [ ClassPattern.isEnum(), ClassPattern.usesStrings("COOL_WARM", "HEAT_ICE", "SPECIAL")],
@@ -102,8 +102,37 @@ class PincraftMapper implements Mapper {
 			//"CommandDispatcher"  : [ ClassPattern.usesStrings("chat.type.admin", "commandBlockOutput"),
 			//                         ClassPattern.subclassOf("CommandHandler")],
 
-			"net/minecraft/client/Minecraft"    : [ ClassPattern.usesStrings("sun.arch.data.model", "com.ibm.vm.bitmode", "os.arch",
-												 "icons/icon_16x16.png", "icons/icon_32x32.png")],
+			"net/minecraft/client/Minecraft"          : [
+					ClassPattern.usesStrings("sun.arch.data.model", "com.ibm.vm.bitmode", "os.arch",
+			                                 "icons/icon_16x16.png", "icons/icon_32x32.png")],
+
+			"net/minecraft/nbt/CompressedStreamTools" : [
+					ClassPattern.usesStrings("Failed to delete ", "_tmp", "Root tag must be a named compound tag",
+							"Loading NBT data")],
+			"net/minecraft/nbt/NBTBase"               : [
+					ClassPattern.usesStrings("END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE",
+					                         "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]")],
+			"net/minecraft/nbt/NBTTagString"          : [
+					ClassPattern.usesStrings("Empty string not allowed", "\"", "")],
+			"net/minecraft/nbt/JsonToNBT\$Primitive"  : [
+			        ClassPattern.usesStrings("[-+]?[0-9]*\\.?[0-9]+[d|D]",
+					                         "[-+]?[0-9]*\\.?[0-9]+[f|F]",
+					                         "[-+]?[0-9]+[b|B]",
+					                         "[-+]?[0-9]+[l|L]")],
+			"net/minecraft/nbt/JsonToNBT"             : [
+			        ClassPattern.usesStrings("Encountered multiple top tags, only one expected",
+											 "tag","{","Illegal use of \\\": ","Unbalanced curly brackets {}: ")],
+			"net/minecraft/nbt/NBTSizeTracker"        : [
+			        ClassPattern.usesStrings("Tried to read NBT tag that was too big; tried to allocate: ",
+					                         "bytes where max allowed: ")],
+			"net/minecraft/nbt/NBTByteArray"          : [
+					ClassPattern.usesStrings("[", " bytes]")],
+			"net/minecraft/nbt/NBTTagCompound"        : [
+					ClassPattern.usesStrings("Tried to read NBT tag with too high complexity, depth > 512",
+					"Reading NBT data","Tag type found","Corrupt NBT tag","Tag type expected")],
+			"net/minecraft/nbt/NBTTagEnd"             : [
+			        ClassPattern.usesStrings("END"),
+					ClassPattern.subclassOf("net/minecraft/nbt/NBTBase")],
 			//"EmptyChunk"         : [ Characteristic.subclassOf("Chunk"), /* references java.util.Random and java.util.List */],
 
 			//Not Working Yet
@@ -113,14 +142,24 @@ class PincraftMapper implements Mapper {
 			//"EnumMobType"        : [ Characteristic.isEnum(), new Characteristic.Strings("everything", "mobs", "players")],
 //"EntityAgeable" : [ Characteristic.subclassOf("Entity"), new Characteristic.Strings("Age") ],
 //"EntityAmbient" : [ Characteristic.subclassOf("EntityInsentient")], // Characteristic.doesImplement("IAnimal")],
+			"net/minecraft/entity/projectile/EntityArrow" : [
+			        ClassPattern.usesStrings("random.bowhit","inTile","inData")],
+			"net/minecraft/entity/projectile/EntityThrowable" : [
+					ClassPattern.usesStrings("ownerName", "inTile")],
+			"net/minecraft/entity/projectile/EntityEgg" : [
+					ClassPattern.usesStrings("doMobSpawning"),
+					ClassPattern.subclassOf("net/minecraft/entity/projectile/EntityThrowable")],
+			"net/minecraft/entity/projectile/EntityPotion" : [
+					ClassPattern.usesStrings("Potion"),
+					ClassPattern.subclassOf("net/minecraft/entity/projectile/EntityThrowable")
 
-			//"EntityProjectile"  : [ ClassPattern.usesStrings("bubble","shake","inTile","inGround","ownerName"),
-             //           ClassPattern.subclassOf ("Entity") ], //FAILED MAPPING
+			],
 	];
 
-	private Map<String, List<ClassPattern>> indirectPatterns = [:
+	private Map<String, List<ClassPattern>> indirectPatterns = [
 			//Tagging Classes
-			//"IAnimal"       : [ ClassPattern.implementedBy("EntityAnimal")],
+			"net/minecraft/entity/passive/IAnimals"       : [ ClassPattern.implementedBy("net/minecraft/entity/passive/EntityAnimal")],
+			"net/minecraft/entity/IProjectile" : [ ClassPattern.implementedBy("net/minecraft/entity/projectile/EntityArrow")],
 			//"IProjectile"   : [ ClassPattern.implementedBy("EntityProjectile")],
 
 	];
